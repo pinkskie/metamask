@@ -2,7 +2,7 @@
 import { useEthers } from "@usedapp/core";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Button, Container } from "../shared/ui";
+import { Button, Container } from "../../shared/ui";
 
 export const Header = () => {
   const { activateBrowserWallet, account } = useEthers();
@@ -16,9 +16,7 @@ export const Header = () => {
         {account ? (
           <Account>{account}</Account>
         ) : (
-          <Button onClick={() => activateBrowserWallet()}>
-            Connect MetaMask
-          </Button>
+          <Button onClick={activateBrowserWallet}>Connect MetaMask</Button>
         )}
       </HeaderWrapper>
     </Container>

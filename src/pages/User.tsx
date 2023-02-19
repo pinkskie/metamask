@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { Loader } from "../assets/Loader";
+import { Loader } from "../shared/assets/Loader";
 import { PrimaryText } from "../shared/ui";
-import { useGetUserByIdQuery } from "../store/unistory/unistory-api";
+import { useGetUserByIdQuery } from "../app/store/unistory-api";
 
 export default function User() {
   const { id } = useParams();
@@ -30,7 +30,7 @@ export default function User() {
               <PrimaryText>{data?.address}</PrimaryText>
             </div>
             <PlanetImage>
-              <img src={require("../assets/nonAnimated.png")} alt="ok" />
+              <img src={require("../shared/assets/nonAnimated.png")} alt="ok" />
             </PlanetImage>
           </UserInfo>
         </Wrapper>

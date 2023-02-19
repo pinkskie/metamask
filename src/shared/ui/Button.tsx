@@ -28,11 +28,12 @@ const MainButton = styled.button`
   color: white;
   transition: 0.2s;
   cursor: pointer;
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: #be3b10;
     transform: scale(1.05);
   }
   &:disabled {
-    opacity: 0.7;
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;

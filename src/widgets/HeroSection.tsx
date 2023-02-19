@@ -1,47 +1,44 @@
-import React from "react";
 import styled from "styled-components";
-import { Planet } from "../../assets/PlanetSVG";
-import { PrimaryText } from "../../shared/ui";
+import { Planet } from "../shared/assets/PlanetSVG";
+import { PrimaryText } from "../shared/ui";
 
-export const HeroSection = () => {
-  return (
-    <Section>
-      <HeroTextContent>
-        <MainTextBg>
-          <MainText>
-            Explore your own planet <br /> in <span>our new</span> metaverse
-            <Absolute>
-              <Planet />
-            </Absolute>
-          </MainText>
-        </MainTextBg>
-        <SecondaryText>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </SecondaryText>
-      </HeroTextContent>
-      <HeroRoadmap>
-        <RoadmapTitle>Roadmap stats</RoadmapTitle>
-        <RoadmapList>
-          <RoadmapItem>
-            <PrimaryText>12, 500</PrimaryText>
-            <StyledP>Lorem ipsum dolor.</StyledP>
-          </RoadmapItem>
-          <RoadmapItem>
-            <PrimaryText>12, 500</PrimaryText>
-            <StyledP>Lorem ipsum dolor.</StyledP>
-          </RoadmapItem>
-          <RoadmapItem>
-            <PrimaryText>12, 500</PrimaryText>
-            <StyledP>Lorem ipsum dolor.</StyledP>
-          </RoadmapItem>
-        </RoadmapList>
-      </HeroRoadmap>
-    </Section>
-  );
-};
+export const HeroSection = () => (
+  <Section>
+    <HeroTextContent>
+      <MainTextBg>
+        <MainText>
+          Explore your own planet <br /> in <span>our new</span> metaverse
+          <Absolute>
+            <Planet />
+          </Absolute>
+        </MainText>
+      </MainTextBg>
+      <SecondaryText>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+        commodo consequat.
+      </SecondaryText>
+    </HeroTextContent>
+    <HeroRoadmap>
+      <RoadmapTitle>Roadmap stats</RoadmapTitle>
+      <RoadmapList>
+        <RoadmapItem>
+          <PrimaryText>12, 500</PrimaryText>
+          <StyledP>Lorem ipsum dolor.</StyledP>
+        </RoadmapItem>
+        <RoadmapItem>
+          <PrimaryText>12, 500</PrimaryText>
+          <StyledP>Lorem ipsum dolor.</StyledP>
+        </RoadmapItem>
+        <RoadmapItem>
+          <PrimaryText>12, 500</PrimaryText>
+          <StyledP>Lorem ipsum dolor.</StyledP>
+        </RoadmapItem>
+      </RoadmapList>
+    </HeroRoadmap>
+  </Section>
+);
 
 const Section = styled.div`
   display: flex;
