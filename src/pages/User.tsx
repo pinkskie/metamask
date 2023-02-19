@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { Loader } from "../assets/Loader";
-import { Container, PrimaryText } from "../shared/ui";
+import { PrimaryText } from "../shared/ui";
 import { useGetUserByIdQuery } from "../store/unistory/unistory-api";
 
 export default function User() {
