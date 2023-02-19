@@ -1,14 +1,14 @@
-import { useEthers } from "@usedapp/core";
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-import { Loader } from "../assets/Loader";
+import { useEthers } from "@usedapp/core";
+import useInfiniteScroll from "react-infinite-scroll-hook";
+
 import { Modal } from "../components/Modal";
 import { Button, Container, Input, PrimaryText } from "../shared/ui";
 import { useGetUsersQuery } from "../store/unistory/unistory-api";
+import { HeroSection } from "../sections/Home/HeroSection";
+import { Loader } from "../assets/Loader";
 import styled from "styled-components";
-import { Planet } from "../assets/PlanetSVG";
-import useInfiniteScroll from "react-infinite-scroll-hook";
 
 const Home = () => {
   const { account } = useEthers();
@@ -16,7 +16,7 @@ const Home = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [userSubmit, setUserSubmit] = useState<boolean>(false);
-  const [user, setUser] = useState<any>(
+  const [user, setUser] = useState<any>( // Omit<IUser, id>
     JSON.parse(localStorage.getItem("user") || "{}")
   );
 
@@ -67,41 +67,7 @@ const Home = () => {
     <>
       {isLoading && <Loader />}
       <Container>
-        <HeroSection>
-          <HeroTextContent>
-            <MainTextBg>
-              <MainText>
-                Explore your own planet <br /> in <span>our new</span> metaverse
-                <Absolute>
-                  <Planet />
-                </Absolute>
-              </MainText>
-            </MainTextBg>
-            <SecondaryText>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </SecondaryText>
-          </HeroTextContent>
-          <HeroRoadmap>
-            <RoadmapTitle>Roadmap stats</RoadmapTitle>
-            <RoadmapList>
-              <RoadmapItem>
-                <PrimaryText>12, 500</PrimaryText>
-                <StyledP>Lorem ipsum dolor.</StyledP>
-              </RoadmapItem>
-              <RoadmapItem>
-                <PrimaryText>12, 500</PrimaryText>
-                <StyledP>Lorem ipsum dolor.</StyledP>
-              </RoadmapItem>
-              <RoadmapItem>
-                <PrimaryText>12, 500</PrimaryText>
-                <StyledP>Lorem ipsum dolor.</StyledP>
-              </RoadmapItem>
-            </RoadmapList>
-          </HeroRoadmap>
-        </HeroSection>
+        <HeroSection />
         <RegisterSection>
           <div>
             <PrimaryText>Beta test registration</PrimaryText>
@@ -136,41 +102,50 @@ const Home = () => {
               </RegisterForm>
             )}
           </div>
-          <TableWrapper>
-            <Table cellSpacing={0}>
-              <thead>
-                <tr>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Wallet</TableHead>
-                </tr>
-              </thead>
-              <TableBody>
-                {userSubmit ? (
-                  <TableRow>
-                    <StyledTableCell>{user.name}</StyledTableCell>
-                    <StyledTableCell>{user.email}</StyledTableCell>
-                    <StyledTableCell>{user.address}</StyledTableCell>
-                    <TableCell onClick={() => setUserSubmit(false)}>
-                      X
+          <div style={{ width: "55%" }}>
+            <TableTitle>
+              Participation listing (enable only for participants)
+            </TableTitle>
+            <TableWrapper>
+              <table cellSpacing={0}>
+                <THeadWrapper>
+                  <tr>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Wallet</TableHead>
+                  </tr>
+                </THeadWrapper>
+                <tbody>
+                  {userSubmit ? (
+                    <TableRow disabled>
+                      <StyledTableCell>{user.name}</StyledTableCell>
+                      <StyledTableCell>{user.email}</StyledTableCell>
+                      <StyledTableCell>
+                        <Ellipsed>{user.address}</Ellipsed>
+                        <DeleteButton onClick={() => setUserSubmit(false)}>
+                          X
+                        </DeleteButton>
+                      </StyledTableCell>
+                    </TableRow>
+                  ) : null}
+                  {data.map(({ id, username, email, address }) => (
+                    <TableRow onClick={() => handleRoute(id)} key={id}>
+                      <TableCell>{username}</TableCell>
+                      <TableCell>{email}</TableCell>
+                      <TableCell>
+                        <Ellipsed>{address}</Ellipsed>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  <TableRow ref={sentryRef}>
+                    <TableCell colSpan={3} style={{ textAlign: "center" }}>
+                      Loading...
                     </TableCell>
                   </TableRow>
-                ) : null}
-                {data.map(({ id, username, email, address }) => (
-                  <TableRow onClick={() => handleRoute(id)} key={id}>
-                    <TableCell>{username}</TableCell>
-                    <TableCell>{email}</TableCell>
-                    <TableCell>{address}</TableCell>
-                  </TableRow>
-                ))}
-                <TableRow ref={sentryRef}>
-                  <TableCell colSpan={3} style={{ textAlign: "center" }}>
-                    Loading...
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableWrapper>
+                </tbody>
+              </table>
+            </TableWrapper>
+          </div>
         </RegisterSection>
       </Container>
       {showModal && <Modal onClose={() => setShowModal(false)} />}
@@ -180,88 +155,10 @@ const Home = () => {
 
 export default Home;
 
-const HeroSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 8rem 0;
-`;
-
-const HeroTextContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-  position: relative;
-`;
-
-const HeroRoadmap = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding-top: 1rem;
-  width: 15%;
-`;
-
-const RoadmapTitle = styled.p`
-  font-size: 2rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-align: center;
-`;
-
-const RoadmapList = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const RoadmapItem = styled.div`
-  text-align: center;
-  border-bottom: 0.5px solid #d2c4c4;
-  padding: 1rem 0;
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-const MainTextBg = styled.div`
-  /* background: url(${require("../assets/red.svg")});
-  -webkit-text-fill-color: transparent;
-
-  background-clip: text;
-  -webkit-background-clip: text;
-  background-repeat: no-repeat; */
-`;
-
-const MainText = styled.p`
-  font-size: 9rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 6px;
-  line-height: 144px;
-  position: relative;
-
-  & span {
-    color: #171719;
-    text-shadow: 0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white;
-  }
-`;
-
-const Absolute = styled.div`
-  position: absolute;
-  top: -50%;
-  right: -2%;
-  z-index: -1;
-`;
-
 const SecondaryText = styled.p`
   max-width: 25rem;
   margin-top: 2rem;
   font-family: Nunito;
-`;
-
-const StyledP = styled.p`
-  text-transform: uppercase;
-  font-size: 1.5rem;
 `;
 
 const RegisterSection = styled.div`
@@ -289,8 +186,15 @@ const ButtonPosition = styled.div`
   margin-top: 2rem;
 `;
 
+const TableTitle = styled.p`
+  font-weight: 700;
+  font-size: 2.25rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+`;
+
 const TableWrapper = styled.div`
-  width: 55%;
+  width: 100%;
   max-height: 36.5rem;
   overflow-y: scroll;
   padding-right: 2rem;
@@ -302,10 +206,11 @@ const TableWrapper = styled.div`
   }
 `;
 
-const TableBody = styled.tbody``;
-
-const Table = styled.table`
-  width: 100%;
+const THeadWrapper = styled.thead`
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  background-color: #171719;
 `;
 
 const TableHead = styled.th`
@@ -314,20 +219,26 @@ const TableHead = styled.th`
   padding: 1rem 0;
 `;
 
-const TableRow = styled.tr`
+const TableRow = styled.tr<{ disabled?: boolean }>`
   font-family: Nunito;
   font-size: 1rem;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "initial" : "pointer")};
   transition: all 0.2s;
   &:hover {
-    transform: translateX(3px);
+    transform: ${(props) => (props.disabled ? "none" : "translateX(3px)")};
   }
 `;
 
 const TableCell = styled.td`
   padding: 1rem 0;
   border-top: 1px solid white;
-  width: 33%;
+  width: 25%;
+  text-overflow: ellipsis;
+`;
+
+const Ellipsed = styled.p`
+  width: 20rem;
+  overflow: hidden;
   text-overflow: ellipsis;
 `;
 
@@ -335,6 +246,19 @@ const StyledTableCell = styled.td`
   color: #e75626;
   padding: 1rem 0;
   border-top: 1px solid white;
-  width: 33%;
+  width: 25%;
   text-overflow: ellipsis;
+  position: relative;
+`;
+
+const DeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
+  color: white;
+  position: absolute;
+  right: 0;
+  border-radius: 100%;
+  padding: 0.1rem;
+  top: 0.8rem;
+  padding: 0.3rem;
 `;
